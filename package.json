@@ -1,0 +1,23 @@
+{
+  "name": "comments",
+  "version": "0.0.0",
+  "description": "React Tutorial",
+  "main": "server.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "iojs server.js"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "David Gómez",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
+    "react": "^0.13.3"
+  }
+}
