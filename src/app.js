@@ -7,13 +7,17 @@
    react/no-danger: 0 */
 
 var PropTypes = React.PropTypes;
+var data = [
+  {author: 'Pete Hunt', text: 'This is one comment'},
+  {author: 'Jordan Walke', text: 'This is *another* comment'}
+];
 
 var CommentBox = React.createClass({
   render: function() {
     return (
       <div className='commentBox'>
         <h1>Comments</h1>
-        <CommentList />
+        <CommentList data={this.props.data} />
         <CommentForm />
       </div>
     );
@@ -22,10 +26,16 @@ var CommentBox = React.createClass({
 
 var CommentList = React.createClass({
   render: function() {
+    var commentNodes = this.props.data.map(function(comment) {
+      return (
+        <Comment author={comment.author}>
+          {comment.text}
+        </Comment>
+      );
+    });
     return (
-      <div className='commentForm'>
-        <Comment author='Pete Hunt'>This is one comment</Comment>
-        <Comment author='Jordan Walke'>This is *another* comment</Comment>
+      <div className='commentList'>
+        {commentNodes}
       </div>
     );
   }
@@ -56,6 +66,6 @@ var Comment = React.createClass({
 });
 
 React.render(
-  <CommentBox />,
+  <CommentBox url='comments.json' />,
   document.getElementById('content')
 );
