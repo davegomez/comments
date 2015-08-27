@@ -1,11 +1,10 @@
 var PropTypes = React.PropTypes;
-// Data example
 var data = [
   {author: 'Pete Hunt', text: 'This is one comment'},
   {author: 'Jordan Walke', text: 'This is *another* comment'}
 ];
 
-var CommentBox = React.createClass({
+var CommentBox = React.createClass({displayName: "CommentBox",
   getInitialState: function() {
     return {data: []};
   },
@@ -30,7 +29,7 @@ var CommentBox = React.createClass({
     var comments = this.state.data;
     var newComments = comments.concat([comment]);
     this.setState({data: newComments});
-    // Submit to the server and refresh the list
+    // submit to the server and refresh the list
     $.ajax({
       url: this.props.url,
       dataType: 'json',
@@ -46,33 +45,33 @@ var CommentBox = React.createClass({
   },
   render: function() {
     return (
-      <div className='commentBox'>
-        <h1>Comments</h1>
-        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
-        <CommentList data={this.state.data} />
-      </div>
+      React.createElement("div", {className: "commentBox"}, 
+        React.createElement("h1", null, "Comments"), 
+        React.createElement(CommentForm, {onCommentSubmit: this.handleCommentSubmit}), 
+        React.createElement(CommentList, {data: this.state.data})
+      )
     );
   }
 });
 
-var CommentList = React.createClass({
+var CommentList = React.createClass({displayName: "CommentList",
   render: function() {
     var commentNodes = this.props.data.map(function(comment) {
       return (
-        <Comment author={comment.author}>
-          {comment.text}
-        </Comment>
+        React.createElement(Comment, {author: comment.author}, 
+          comment.text
+        )
       );
     });
     return (
-      <div className='commentList'>
-        {commentNodes}
-      </div>
+      React.createElement("div", {className: "commentList"}, 
+        commentNodes
+      )
     );
   }
 });
 
-var CommentForm = React.createClass({
+var CommentForm = React.createClass({displayName: "CommentForm",
   handleSubmit: function(e) {
     e.preventDefault();
     var author = React.findDOMNode(this.refs.author).value.trim();
@@ -80,7 +79,7 @@ var CommentForm = React.createClass({
     if (!text || !author) {
       return;
     }
-    // Send request to the server
+    // send request to the server
     this.props.onCommentSubmit({author: author, text: text});
     React.findDOMNode(this.refs.author).value = '';
     React.findDOMNode(this.refs.text).value = '';
@@ -88,30 +87,30 @@ var CommentForm = React.createClass({
   },
   render: function() {
     return (
-      <form className='commentForm' onSubmit={this.handleSubmit}>
-        <input type='text' placeholder='Your name' ref='author' />
-        <input type='text' placeholder='Say something...' ref='text' />
-        <input type='submit' value='Post' />
-      </form>
+      React.createElement("form", {className: "commentForm", onSubmit: this.handleSubmit}, 
+        React.createElement("input", {type: "text", placeholder: "Your name", ref: "author"}), 
+        React.createElement("input", {type: "text", placeholder: "Say something...", ref: "text"}), 
+        React.createElement("input", {type: "submit", value: "Post"})
+      )
     );
   }
 });
 
-var Comment = React.createClass({
+var Comment = React.createClass({displayName: "Comment",
   render: function() {
     var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
     return (
-      <div className='comment'>
-        <h2 className='commentAuthor'>
-          {this.props.author}
-        </h2>
-        <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
-      </div>
+      React.createElement("div", {className: "comment"}, 
+        React.createElement("h2", {className: "commentAuthor"}, 
+          this.props.author
+        ), 
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: rawMarkup}})
+      )
     );
   }
 });
 
 React.render(
-  <CommentBox url='comments.json' pollInterval={2000} />,
+  React.createElement(CommentBox, {url: "comments.json", pollInterval: 2000}),
   document.getElementById('content')
 );

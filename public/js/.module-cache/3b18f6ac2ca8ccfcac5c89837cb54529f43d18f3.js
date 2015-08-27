@@ -1,5 +1,12 @@
+/* eslint
+   func-names: 0,
+   object-shorthand: 0,
+   react/react-in-jsx-scope: 0,
+   no-unused-vars: 0,
+   react/prop-types: 0,
+   react/no-danger: 0 */
+
 var PropTypes = React.PropTypes;
-// Data example
 var data = [
   {author: 'Pete Hunt', text: 'This is one comment'},
   {author: 'Jordan Walke', text: 'This is *another* comment'}
@@ -26,30 +33,12 @@ var CommentBox = React.createClass({displayName: "CommentBox",
       }.bind(this)
     });
   },
-  handleCommentSubmit: function(comment) {
-    var comments = this.state.data;
-    var newComments = comments.concat([comment]);
-    this.setState({data: newComments});
-    // Submit to the server and refresh the list
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      type: 'POST',
-      data: comment,
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
   render: function() {
     return (
       React.createElement("div", {className: "commentBox"}, 
         React.createElement("h1", null, "Comments"), 
-        React.createElement(CommentForm, {onCommentSubmit: this.handleCommentSubmit}), 
-        React.createElement(CommentList, {data: this.state.data})
+        React.createElement(CommentList, {data: this.state.data}), 
+        React.createElement(CommentForm, null)
       )
     );
   }
@@ -73,24 +62,11 @@ var CommentList = React.createClass({displayName: "CommentList",
 });
 
 var CommentForm = React.createClass({displayName: "CommentForm",
-  handleSubmit: function(e) {
-    e.preventDefault();
-    var author = React.findDOMNode(this.refs.author).value.trim();
-    var text = React.findDOMNode(this.refs.text).value.trim();
-    if (!text || !author) {
-      return;
-    }
-    // Send request to the server
-    this.props.onCommentSubmit({author: author, text: text});
-    React.findDOMNode(this.refs.author).value = '';
-    React.findDOMNode(this.refs.text).value = '';
-    return;
-  },
   render: function() {
     return (
-      React.createElement("form", {className: "commentForm", onSubmit: this.handleSubmit}, 
-        React.createElement("input", {type: "text", placeholder: "Your name", ref: "author"}), 
-        React.createElement("input", {type: "text", placeholder: "Say something...", ref: "text"}), 
+      React.createElement("form", {className: "commentForm"}, 
+        React.createElement("input", {type: "text", placeholder: "Your name"}), 
+        React.createElement("input", {type: "text", placeholder: "Say something..."}), 
         React.createElement("input", {type: "submit", value: "Post"})
       )
     );
